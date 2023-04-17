@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BishopTest {
 
     private Board board;
+
     @BeforeEach
     void setUp() {
         this.board = Board.startGame();
