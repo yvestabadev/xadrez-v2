@@ -19,29 +19,36 @@ public class Pawn extends Piece{
     @Override
     protected Set<Position> getPositions(Board board, Position position) {
         var ret = new HashSet<Position>();
-        var pos = new Position(position.col(), position.lin() + getLineDirectionByColor(1));
+        var pos = new Position(position.getCol(), position.getLin() + getLineDirectionByColor(1));
         addIfDoesNotExistOnBoard(ret, board, pos);
-        if(position.lin() == getInitialLineByColor() && ret.size() == 1){
-            addIfDoesNotExistOnBoard(ret, board, new Position(position.col(),
-                    position.lin() + getLineDirectionByColor(2)));
+        if(position.getLin() == getInitialLineByColor() && ret.size() == 1){
+            addIfDoesNotExistOnBoard(ret, board, new Position(position.getCol(),
+                    position.getLin() + getLineDirectionByColor(2)));
         }
         getCapturable(board, position, ret);
         return ret;
     }
 
     private void getCapturable(Board board, Position position, Set<Position> positions){
-        Position plusOneColumn = new Position(position.col() + 1,
-                position.lin() + getLineDirectionByColor(1));
-        Piece piece = board.getPiece(plusOneColumn);
-        if(nonNull(piece) && piece.getColor() != this.getColor()){
-            positions.add(plusOneColumn);
+        try {
+            Position plusOneColumn = new Position(position.getCol() + 1,
+                    position.getLin() + getLineDirectionByColor(1));
+            Piece piece = board.getPiece(plusOneColumn);
+            if (nonNull(piece) && piece.getColor() != this.getColor()) {
+                positions.add(plusOneColumn);
+            }
+        } catch (RuntimeException e){
+            //ignore
         }
-
-        Position minusOneColumn = new Position(position.col() - 1,
-                position.lin() + getLineDirectionByColor(1));
-        piece = board.getPiece(minusOneColumn);
-        if(nonNull(piece) && piece.getColor() != this.getColor()){
-            positions.add(minusOneColumn);
+        try {
+            Position minusOneColumn = new Position(position.getCol() - 1,
+                    position.getLin() + getLineDirectionByColor(1));
+            Piece piece = board.getPiece(minusOneColumn);
+            if (nonNull(piece) && piece.getColor() != this.getColor()) {
+                positions.add(minusOneColumn);
+            }
+        } catch (RuntimeException e){
+            //ignore
         }
     }
 
