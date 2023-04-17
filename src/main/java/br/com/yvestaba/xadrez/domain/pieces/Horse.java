@@ -3,10 +3,12 @@ package br.com.yvestaba.xadrez.domain.pieces;
 import br.com.yvestaba.xadrez.domain.Board;
 import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Position;
+import br.com.yvestaba.xadrez.utils.ChessCommonUtils;
 
 import java.util.*;
 
 import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.addIfDoesNotExistOnBoardOrCapturable;
+import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.validateColLin;
 
 public class Horse extends Piece{
 
@@ -36,7 +38,7 @@ public class Horse extends Piece{
     }
 
     private void ignoreInvalidPositionsAndAdd(List<Position> list, int col, int lin){
-        if(col < 8 && col >= 0 && lin < 8 && lin >= 0){
+        if(validateColLin(col, lin)){
             list.add(new Position(col, lin));
         }
     }

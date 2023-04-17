@@ -3,6 +3,7 @@ package br.com.yvestaba.xadrez.domain.pieces;
 import br.com.yvestaba.xadrez.domain.Board;
 import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Position;
+import br.com.yvestaba.xadrez.utils.MoveCross;
 
 import java.util.Set;
 
@@ -13,6 +14,6 @@ public class Tower extends Piece{
     }
     @Override
     protected Set<Position> getPositions(Board board, Position position) {
-        return null;
+        return MoveCross.getMovements(board, position);
     }
 }

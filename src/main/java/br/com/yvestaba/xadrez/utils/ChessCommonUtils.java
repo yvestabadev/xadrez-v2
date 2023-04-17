@@ -5,6 +5,7 @@ import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.Piece;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
@@ -33,5 +34,9 @@ public class ChessCommonUtils {
             positions.add(position);
         }
         return piece;
+    }
+
+    public static boolean validateColLin(int col, int lin){
+        return col >= 0 && col < 8 && lin >= 0 && lin < 8;
     }
 }
