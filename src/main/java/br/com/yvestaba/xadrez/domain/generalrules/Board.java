@@ -1,6 +1,7 @@
 package br.com.yvestaba.xadrez.domain.generalrules;
 
 import br.com.yvestaba.xadrez.domain.Color;
+import br.com.yvestaba.xadrez.domain.GameStatus;
 import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.*;
 
@@ -15,6 +16,7 @@ public class Board implements MoveChecker, MoveValidator {
 
     private Map<Position, Piece> board = new HashMap<>();
     private Color turnOwner = WHITE;
+    private GameStatus status;
 
     private Board(){
 
@@ -77,5 +79,13 @@ public class Board implements MoveChecker, MoveValidator {
             }
         });
         return ret;
+    }
+
+    void setStatus(GameStatus status) {
+        this.status = status;
+    }
+
+    GameStatus getStatus() {
+        return status;
     }
 }

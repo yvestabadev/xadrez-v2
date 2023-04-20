@@ -19,10 +19,25 @@ class ThreatCheckerTest {
     @Test
     void checkMate(){
         piecesMover.movePiece(new Position(6, 1), new Position(6,3));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
         piecesMover.movePiece(new Position(4,6), new Position(4,4));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
         piecesMover.movePiece(new Position(5,1), new Position(5,2));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
         piecesMover.movePiece(new Position(3,7), new Position(7, 3));
         assertEquals(GameStatus.CHECKMATE, piecesMover.getStatus());
+    }
+
+    @Test
+    void check(){
+        piecesMover.movePiece(new Position(5, 1), new Position(5,3));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
+        piecesMover.movePiece(new Position(4,6), new Position(4,4));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
+        piecesMover.movePiece(new Position(4,1), new Position(4,2));
+        assertEquals(GameStatus.NONE, piecesMover.getStatus());
+        piecesMover.movePiece(new Position(3,7), new Position(7, 3));
+        assertEquals(GameStatus.CHECK, piecesMover.getStatus());
     }
 
 }

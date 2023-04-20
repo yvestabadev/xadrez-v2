@@ -16,7 +16,6 @@ class PiecesMover {
     private final RockChecker rockChecker;
     private final KingPosition kingPosition;
     private final Board board;
-    private GameStatus status;
 
     public PiecesMover(){
         board = Board.startGame();
@@ -24,12 +23,12 @@ class PiecesMover {
         rockChecker = new RockChecker();
         kingPosition = new KingPosition();
         movers = Arrays.asList(board, threatChecker, rockChecker, kingPosition);
-        validators = Arrays.asList(board, new UncoverKingValidator(kingPosition, threatChecker));
+        validators = Arrays.asList(board, new UncoverKingValidator(kingPosition, threatChecker), new MoveInCheckValidator(kingPosition, threatChecker));
     }
 
     public void movePiece(Position from, Position to){
         movers.forEach(m -> m.movePiece(from, to, board));
-        status = CheckMateChecker.check(threatChecker, kingPosition, board, this);
+        CheckMateChecker.check(threatChecker, kingPosition, board, this);
     }
 
     public Set<Position> validMoves(Position from){
@@ -41,6 +40,6 @@ class PiecesMover {
     }
 
     public GameStatus getStatus(){
-        return status;
+        return board.getStatus();
     }
 }

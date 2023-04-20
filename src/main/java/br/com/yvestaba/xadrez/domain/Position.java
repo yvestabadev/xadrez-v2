@@ -9,7 +9,7 @@ public class Position {
 
     public Position(int col, int lin){
         if(col > 7 || col < 0 || lin > 7|| lin < 0){
-            throw new RuntimeException("invalid position");
+            throw new RuntimeException("invalid position. col: " + col + "; lin: " + lin);
         }
         this.col = col;
         this.lin = lin;

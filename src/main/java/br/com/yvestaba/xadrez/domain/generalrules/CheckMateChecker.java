@@ -1,35 +1,40 @@
 package br.com.yvestaba.xadrez.domain.generalrules;
 
 import br.com.yvestaba.xadrez.domain.Color;
+import br.com.yvestaba.xadrez.domain.Direction;
 import br.com.yvestaba.xadrez.domain.GameStatus;
+import br.com.yvestaba.xadrez.domain.Position;
+
+import java.util.Set;
 
 import static br.com.yvestaba.xadrez.domain.Color.WHITE;
 
 class CheckMateChecker {
 
-    static GameStatus check(ThreatChecker threatChecker, KingPosition kingPosition, Board board, PiecesMover mover){
+    static void check(ThreatChecker threatChecker, KingPosition kingPosition, Board board, PiecesMover mover){
         Color turnOwner = board.getTurnOwner();
         //when this method is triggered, the turn owner already changed
         var positionKing = turnOwner == WHITE ? kingPosition.getWhitePosition() : kingPosition.getBlackPosition();
         if(!threatChecker.getThreatenArea().contains(positionKing)){
-            return checkDraw(board, turnOwner, mover);
+            checkDraw(board, turnOwner, mover);
+            return;
         }
         for(var position : board.getPiecesByColor(turnOwner).keySet()){
-            //TODO forbid pieces not to defend the king
             if(!mover.validMoves(position).isEmpty()){
-                return GameStatus.CHECK;
+                board.setStatus(GameStatus.CHECK);
+                return;
             }
         }
-        return GameStatus.CHECKMATE;
+        board.setStatus(GameStatus.CHECKMATE);
     }
-
-    private static GameStatus checkDraw(Board board, Color turnOwner, PiecesMover mover) {
+    private static void checkDraw(Board board, Color turnOwner, PiecesMover mover) {
         for(var position : board.getPiecesByColor(turnOwner).keySet()){
             if(!mover.validMoves(position).isEmpty()){
-                return GameStatus.NONE;
+                board.setStatus(GameStatus.NONE);
+                return;
             }
         }
-        return GameStatus.DRAW;
+        board.setStatus(GameStatus.DRAW);
     }
 
 }
