@@ -1,6 +1,6 @@
 package br.com.yvestaba.xadrez.domain.pieces;
 
-import br.com.yvestaba.xadrez.domain.Board;
+import br.com.yvestaba.xadrez.domain.generalrules.Board;
 import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Position;
 
@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static br.com.yvestaba.xadrez.domain.Color.WHITE;
 import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.addIfDoesNotExistOnBoard;
+import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.validateColLin;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece{
@@ -29,26 +30,40 @@ public class Pawn extends Piece{
         return ret;
     }
 
-    private void getCapturable(Board board, Position position, Set<Position> positions){
-        try {
-            Position plusOneColumn = new Position(position.getCol() + 1,
-                    position.getLin() + getLineDirectionByColor(1));
-            Piece piece = board.getPiece(plusOneColumn);
-            if (nonNull(piece) && piece.getColor() != this.getColor()) {
-                positions.add(plusOneColumn);
-            }
-        } catch (RuntimeException e){
-            //ignore
+    @Override
+    public Set<Position> threat(Board board, Position position) {
+        var ret = new HashSet<Position>();
+        int plusOneColumn = position.getCol() + 1;
+        final int lin = position.getLin() + getLineDirectionByColor(1);
+        if(validateColLin(plusOneColumn, lin)) {
+            Position pos = new Position(plusOneColumn, lin);
+            ret.add(pos);
         }
-        try {
-            Position minusOneColumn = new Position(position.getCol() - 1,
-                    position.getLin() + getLineDirectionByColor(1));
-            Piece piece = board.getPiece(minusOneColumn);
+        int minusOneColumn = position.getCol() + 1;
+        if(validateColLin(minusOneColumn, lin)) {
+            Position pos = new Position(minusOneColumn, lin);
+            ret.add(pos);
+        }
+        return ret;
+    }
+
+    private void getCapturable(Board board, Position position, Set<Position> positions){
+        int plusOneColumn = position.getCol() + 1;
+        final int lin = position.getLin() + getLineDirectionByColor(1);
+        if(validateColLin(plusOneColumn, lin)) {
+            Position pos = new Position(plusOneColumn, lin);
+            Piece piece = board.getPiece(pos);
             if (nonNull(piece) && piece.getColor() != this.getColor()) {
-                positions.add(minusOneColumn);
+                positions.add(pos);
             }
-        } catch (RuntimeException e){
-            //ignore
+        }
+        int minusOneColumn = position.getCol() - 1;
+        if(validateColLin(minusOneColumn, lin)) {
+            Position pos = new Position(minusOneColumn, lin);
+            Piece piece = board.getPiece(pos);
+            if (nonNull(piece) && piece.getColor() != this.getColor()) {
+                positions.add(pos);
+            }
         }
     }
 

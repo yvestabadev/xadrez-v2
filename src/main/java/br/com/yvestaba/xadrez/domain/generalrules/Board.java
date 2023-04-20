@@ -1,5 +1,7 @@
-package br.com.yvestaba.xadrez.domain;
+package br.com.yvestaba.xadrez.domain.generalrules;
 
+import br.com.yvestaba.xadrez.domain.Color;
+import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.*;
 
 import java.util.HashMap;
@@ -9,7 +11,7 @@ import java.util.Set;
 import static br.com.yvestaba.xadrez.domain.Color.BLACK;
 import static br.com.yvestaba.xadrez.domain.Color.WHITE;
 
-public class Board {
+public class Board implements MoveChecker, MoveValidator {
 
     private Map<Position, Piece> board = new HashMap<>();
     private Color turnOwner = WHITE;
@@ -18,11 +20,11 @@ public class Board {
 
     }
 
-    public Set<Position> getValidPlaces(Position from){
+    public Set<Position> getValidPlaces(Position from, Board b, Set<Position> valid){
         return board.get(from).getValidPlaces(this, from);
     }
 
-    public void movePiece(Position from, Position to){
+    public void movePiece(Position from, Position to, Board b){
         var piece = board.get(from);
         var places = piece.getValidPlaces(this, from);
         if(!places.contains(to) || turnOwner != piece.getColor()){
@@ -65,5 +67,15 @@ public class Board {
 
     public Color getTurnOwner() {
         return turnOwner;
+    }
+
+    public Map<Position, Piece> getPiecesByColor(Color color){
+        var ret = new HashMap<Position, Piece>();
+        board.forEach((k, v) -> {
+            if(v.getColor() == color){
+                ret.put(k, v);
+            }
+        });
+        return ret;
     }
 }

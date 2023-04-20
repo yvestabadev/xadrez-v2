@@ -1,10 +1,9 @@
 package br.com.yvestaba.xadrez.domain.pieces;
 
-import br.com.yvestaba.xadrez.domain.Board;
+import br.com.yvestaba.xadrez.domain.generalrules.Board;
 import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Position;
 
-import java.util.Map;
 import java.util.Set;
 
 public abstract class Piece {
@@ -22,6 +21,8 @@ public abstract class Piece {
     }
 
     protected abstract Set<Position> getPositions(Board board, Position position);
+
+    public abstract Set<Position> threat(Board board, Position position);
 
     public Color getColor() {
         return color;

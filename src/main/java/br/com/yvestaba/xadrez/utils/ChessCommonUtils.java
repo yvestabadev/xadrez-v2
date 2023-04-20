@@ -1,11 +1,9 @@
 package br.com.yvestaba.xadrez.utils;
 
-import br.com.yvestaba.xadrez.domain.Board;
-import br.com.yvestaba.xadrez.domain.Color;
+import br.com.yvestaba.xadrez.domain.generalrules.Board;
 import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.Piece;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
@@ -33,6 +31,14 @@ public class ChessCommonUtils {
         if(isNull(piece) || piece.getColor() != board.getTurnOwner()){
             positions.add(position);
         }
+        return piece;
+    }
+
+    public static Piece addThreatAndGetPiece(Set<Position> positions, Board board, int col, int lin) {
+        Piece piece;
+        Position pos = new Position(col, lin);
+        piece = board.getPiece(pos);
+        positions.add(pos);
         return piece;
     }
 
