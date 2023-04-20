@@ -2,6 +2,7 @@ package br.com.yvestaba.xadrez.domain.generalrules;
 
 import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Direction;
+import br.com.yvestaba.xadrez.domain.GameStatus;
 import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.King;
 import br.com.yvestaba.xadrez.domain.pieces.Piece;
@@ -28,6 +29,9 @@ class RockValidator implements MoveValidator{
         if(!from.equals(getKingInitialPosition(turnOwner))){
             return valid;
         }
+        if(board.getStatus() == GameStatus.CHECK){
+            return valid;
+        }
 
         if(checker.smallRockByColor(turnOwner)){
             addSmallRockIfValid(turnOwner, board, valid);
@@ -40,7 +44,7 @@ class RockValidator implements MoveValidator{
 
     private void addBigRockIfValid(Color turnOwner, Board board, Set<Position> valid) {
         int line = getLineByColor(turnOwner);
-        for(int i = 2; i < 5; i++){
+        for(int i = 2; i < 4; i++){
             Position position = new Position(i, line);
             boolean isThereAnyPiece = nonNull(board.getPiece(position));
             if(isThereAnyPiece || threatChecker.getThreatenArea().contains(position)){
@@ -52,7 +56,7 @@ class RockValidator implements MoveValidator{
 
     private void addSmallRockIfValid(Color turnOwner, Board board, Set<Position> valid) {
         int line = getLineByColor(turnOwner);
-        for(int i = 4; i < 7; i++){
+        for(int i = 5; i < 7; i++){
             Position position = new Position(i, line);
             boolean isThereAnyPiece = nonNull(board.getPiece(position));
             if(isThereAnyPiece || threatChecker.getThreatenArea().contains(position)){
