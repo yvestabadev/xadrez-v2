@@ -2,6 +2,7 @@ package br.com.yvestaba.xadrez.domain.pieces;
 
 import br.com.yvestaba.xadrez.domain.generalrules.Board;
 import br.com.yvestaba.xadrez.domain.Position;
+import br.com.yvestaba.xadrez.domain.generalrules.PiecesMover;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,22 +10,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QueenTest {
 
-    private Board board;
+    private PiecesMover board;
 
     @BeforeEach
     void setup(){
-        board = Board.startGame();
+        board = new PiecesMover();
     }
 
     @Test
     void moveAllSides(){
-        board.movePiece(new Position(3, 1), new Position(3, 3), null);
-        board.movePiece(new Position(4, 6), new Position(4,4), null);
-        board.movePiece(new Position(4,1), new Position(4,3), null);
-        board.movePiece(new Position(4,4), new Position(3,3), null);
-        board.movePiece(new Position(3,0), new Position(3,3), null);
-        board.movePiece(new Position(0,6), new Position(0,5), null);
-        var valid  = board.getValidPlaces(new Position(3,3), null, null);
+        board.movePiece(new Position(3, 1), new Position(3, 3));
+        board.movePiece(new Position(4, 6), new Position(4,4));
+        board.movePiece(new Position(4,1), new Position(4,3));
+        board.movePiece(new Position(4,4), new Position(3,3));
+        board.movePiece(new Position(3,0), new Position(3,3));
+        board.movePiece(new Position(0,6), new Position(0,5));
+        var valid  = board.validMoves(new Position(3,3));
         assertTrue(valid.contains(new Position(3,2)));
         assertTrue(valid.contains(new Position(3,1)));
         assertTrue(valid.contains(new Position(3,0)));

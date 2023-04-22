@@ -8,22 +8,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class PiecesMover {
+public class PiecesMover {
 
     private final List<MoveChecker> movers;
     private final List<MoveValidator> validators;
     private final ThreatChecker threatChecker;
-    private final RockChecker rockChecker;
     private final KingPosition kingPosition;
     private final Board board;
 
     public PiecesMover(){
-        board = Board.startGame();
+        final var enPassantChecker = new EnPassantChecker();
+        board = Board.startGame(new EnPassantValidator(enPassantChecker));
         threatChecker = new ThreatChecker();
-        rockChecker = new RockChecker();
+        final var rockChecker = new RockChecker();
         kingPosition = new KingPosition();
-        movers = Arrays.asList(board, threatChecker, rockChecker, kingPosition);
-        validators = Arrays.asList(board, new RockValidator(rockChecker, threatChecker), new UncoverKingValidator(kingPosition, threatChecker), new MoveInCheckValidator(kingPosition, threatChecker));
+        movers = Arrays.asList(board, threatChecker, rockChecker, kingPosition, enPassantChecker, new EnPassantCaptor(enPassantChecker));
+        validators = Arrays.asList(board, new EnPassantValidator(enPassantChecker), new RockValidator(rockChecker, threatChecker), new UncoverKingValidator(kingPosition, threatChecker), new MoveInCheckValidator(kingPosition, threatChecker));
     }
 
     public void movePiece(Position from, Position to){

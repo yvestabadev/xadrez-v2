@@ -2,6 +2,7 @@ package br.com.yvestaba.xadrez.domain.pieces;
 
 import br.com.yvestaba.xadrez.domain.generalrules.Board;
 import br.com.yvestaba.xadrez.domain.Position;
+import br.com.yvestaba.xadrez.domain.generalrules.PiecesMover;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,20 +10,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BishopTest {
 
-    private Board board;
+    private PiecesMover board;
 
     @BeforeEach
     void setUp() {
-        this.board = Board.startGame();
+        this.board = new PiecesMover();
     }
 
     @Test
     void moveForwardAndBackward(){
-        board.movePiece(new Position(3, 1), new Position(3,3), null);
-        board.movePiece(new Position(3, 6), new Position(3,4), null);
-        board.movePiece(new Position(2, 0), new Position(5,3), null);
-        board.movePiece(new Position(4, 6), new Position(4, 4), null);
-        var valid = board.getValidPlaces(new Position(5, 3), null, null);
+        board.movePiece(new Position(3, 1), new Position(3,3));
+        board.movePiece(new Position(3, 6), new Position(3,4));
+        board.movePiece(new Position(2, 0), new Position(5,3));
+        board.movePiece(new Position(4, 6), new Position(4, 4));
+        var valid = board.validMoves(new Position(5, 3));
         assertTrue(valid.contains(new Position(4, 4)));
         assertTrue(valid.contains(new Position(6,4)));
         assertTrue(valid.contains(new Position(6,2)));

@@ -17,9 +17,10 @@ public class Board implements MoveChecker, MoveValidator {
     private Map<Position, Piece> board = new HashMap<>();
     private Color turnOwner = WHITE;
     private GameStatus status;
+    private final EnPassantValidator enPassantValidator;
 
-    private Board(){
-
+    private Board(EnPassantValidator enPassantValidator){
+        this.enPassantValidator = enPassantValidator;
     }
 
     public Set<Position> getValidPlaces(Position from, Board b, Set<Position> valid){
@@ -29,6 +30,7 @@ public class Board implements MoveChecker, MoveValidator {
     public void movePiece(Position from, Position to, Board b){
         var piece = board.get(from);
         var places = piece.getValidPlaces(this, from);
+        places = enPassantValidator.getValidPlaces(from, this, places);
         if(!places.contains(to) || turnOwner != piece.getColor()){
             throw new RuntimeException("Disallowed movement");
         }
@@ -41,8 +43,8 @@ public class Board implements MoveChecker, MoveValidator {
         return board.get(position);
     }
 
-    public static Board startGame(){
-        var board  = new Board();
+    public static Board startGame(EnPassantValidator enPassantValidator){
+        var board  = new Board(enPassantValidator);
         board.board.put(new Position(0,0), new Tower(WHITE));
         board.board.put(new Position(1,0), new Horse(WHITE));
         board.board.put(new Position(2,0), new Bishop(WHITE));
@@ -83,6 +85,10 @@ public class Board implements MoveChecker, MoveValidator {
 
     void setStatus(GameStatus status) {
         this.status = status;
+    }
+
+    void removePiece(Position position){
+        board.remove(position);
     }
 
     GameStatus getStatus() {
