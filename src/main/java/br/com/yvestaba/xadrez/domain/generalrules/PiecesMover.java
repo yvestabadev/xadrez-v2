@@ -27,6 +27,10 @@ public class PiecesMover {
     }
 
     public void movePiece(Position from, Position to){
+        var places = validMoves(from);
+        if(!places.contains(to)){
+            throw new RuntimeException("Disallowed movement");
+        }
         movers.forEach(m -> m.movePiece(from, to, board));
         CheckMateChecker.check(threatChecker, kingPosition, board, this);
     }

@@ -29,21 +29,25 @@ public class Board implements MoveChecker, MoveValidator {
 
     public void movePiece(Position from, Position to, Board b){
         var piece = board.get(from);
-        var places = piece.getValidPlaces(this, from);
-        places = enPassantValidator.getValidPlaces(from, this, places);
-        if(!places.contains(to) || turnOwner != piece.getColor()){
-            throw new RuntimeException("Disallowed movement");
+        if(turnOwner != piece.getColor()){
+            throw new RuntimeException("It's other's turn");
         }
         board.remove(from);
         board.put(to, piece);
         turnOwner = turnOwner == WHITE ? BLACK : WHITE;
     }
 
+    void moveTowerRock(Position from, Position to){
+        Piece piece = board.get(from);
+        board.remove(from);
+        board.put(to, piece);
+    }
+
     public Piece getPiece(Position position){
         return board.get(position);
     }
 
-    public static Board startGame(EnPassantValidator enPassantValidator){
+    static Board startGame(EnPassantValidator enPassantValidator){
         var board  = new Board(enPassantValidator);
         board.board.put(new Position(0,0), new Tower(WHITE));
         board.board.put(new Position(1,0), new Horse(WHITE));
@@ -73,7 +77,7 @@ public class Board implements MoveChecker, MoveValidator {
         return turnOwner;
     }
 
-    public Map<Position, Piece> getPiecesByColor(Color color){
+    Map<Position, Piece> getPiecesByColor(Color color){
         var ret = new HashMap<Position, Piece>();
         board.forEach((k, v) -> {
             if(v.getColor() == color){

@@ -1,5 +1,6 @@
 package br.com.yvestaba.xadrez.domain.generalrules;
 
+import br.com.yvestaba.xadrez.domain.Color;
 import br.com.yvestaba.xadrez.domain.Direction;
 import br.com.yvestaba.xadrez.domain.Position;
 import br.com.yvestaba.xadrez.domain.pieces.King;
@@ -22,7 +23,8 @@ class UncoverKingValidator implements MoveValidator{
     }
     @Override
     public Set<Position> getValidPlaces(Position from, Board board, Set<Position> valid) {
-        if(board.getPiece(from) instanceof King){
+        Piece piece = board.getPiece(from);
+        if(piece instanceof King){
             return KingMoveValidator.validate(valid, threatChecker);
         }
         Direction direction = getDirection(from, kingPosition.getPositionByColor(board.getTurnOwner()));
@@ -30,7 +32,7 @@ class UncoverKingValidator implements MoveValidator{
             return valid;
         }
         if(isCoveringKing(from, board, direction)){
-            var positions = possiblePositions(from, board, direction);
+            var positions = possiblePositions(from, board, direction, piece.getColor().getEnemy());
             if(!positions.isEmpty()) {
                 valid.retainAll(positions);
             }
@@ -39,7 +41,7 @@ class UncoverKingValidator implements MoveValidator{
         return valid;
     }
 
-    private Set<Position> possiblePositions(Position from, Board board, Direction direction){
+    private Set<Position> possiblePositions(Position from, Board board, Direction direction, Color enemy){
         switch (direction){
             case E:
                 Piece pieceE = null;
@@ -49,7 +51,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colE, from.getLin());
                     ret.add(pos);
                     pieceE = board.getPiece(pos);
-                    if(pieceE instanceof MoveCross){
+                    if(pieceE instanceof MoveCross && pieceE.getColor() == enemy){
                         return ret;
                     }
                     colE++;
@@ -63,7 +65,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colW, from.getLin());
                     retW.add(pos);
                     pieceW = board.getPiece(pos);
-                    if(pieceW instanceof MoveCross){
+                    if(pieceW instanceof MoveCross && pieceW.getColor() == enemy){
                         return retW;
                     }
                     colW--;
@@ -77,7 +79,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(from.getCol(), linN);
                     retN.add(pos);
                     pieceN = board.getPiece(pos);
-                    if(pieceN instanceof MoveCross){
+                    if(pieceN instanceof MoveCross && pieceN.getColor() == enemy){
                         return retN;
                     }
                     linN++;
@@ -91,7 +93,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(from.getCol(), linS);
                     retS.add(pos);
                     pieceS = board.getPiece(pos);
-                    if(pieceS instanceof MoveCross){
+                    if(pieceS instanceof MoveCross && pieceS.getColor() == enemy){
                         return retS;
                     }
                     linS--;
@@ -106,7 +108,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colNE, linNE);
                     retNE.add(pos);
                     pieceNE = board.getPiece(pos);
-                    if(pieceNE instanceof MoveDiagonal){
+                    if(pieceNE instanceof MoveDiagonal && pieceNE.getColor() == enemy){
                         return retNE;
                     }
                     colNE++;
@@ -122,7 +124,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colNW, linNW);
                     retNW.add(pos);
                     pieceNW = board.getPiece(pos);
-                    if(pieceNW instanceof MoveDiagonal){
+                    if(pieceNW instanceof MoveDiagonal && pieceNW.getColor() == enemy){
                         return retNW;
                     }
                     colNW--;
@@ -138,7 +140,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colSE, linSE);
                     retSE.add(pos);
                     pieceSE = board.getPiece(pos);
-                    if(pieceSE instanceof MoveDiagonal){
+                    if(pieceSE instanceof MoveDiagonal && pieceSE.getColor() == enemy){
                         return retSE;
                     }
                     linSE--;
@@ -154,7 +156,7 @@ class UncoverKingValidator implements MoveValidator{
                     Position pos = new Position(colSW, linSW);
                     retSW.add(pos);
                     pieceSW = board.getPiece(pos);
-                    if(pieceSW instanceof MoveDiagonal){
+                    if(pieceSW instanceof MoveDiagonal && pieceSW.getColor() == enemy){
                         return retSW;
                     }
                     linSW--;
