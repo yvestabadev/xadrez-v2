@@ -1,8 +1,8 @@
 package br.com.yvestaba.xadrez.utils;
 
-import br.com.yvestaba.xadrez.domain.generalrules.Board;
-import br.com.yvestaba.xadrez.domain.Position;
-import br.com.yvestaba.xadrez.domain.pieces.Piece;
+import br.com.yvestaba.xadrez.game.generalrules.Board;
+import br.com.yvestaba.xadrez.game.Position;
+import br.com.yvestaba.xadrez.game.pieces.Piece;
 
 import java.util.Set;
 
