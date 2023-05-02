@@ -22,6 +22,8 @@ public class DirectionSChecker extends DirectionChecker{
                     piece.getColor() != board.getTurnOwner()){
                 this.threatPosition = new Position(col, i);
                 return Direction.S;
+            } else if(nonNull(piece)){
+                break;
             }
         }
         return null;

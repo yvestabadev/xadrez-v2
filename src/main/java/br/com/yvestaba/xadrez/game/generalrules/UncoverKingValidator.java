@@ -1,14 +1,15 @@
 package br.com.yvestaba.xadrez.game.generalrules;
 
-import br.com.yvestaba.xadrez.game.Color;
 import br.com.yvestaba.xadrez.game.Direction;
 import br.com.yvestaba.xadrez.game.Position;
+import br.com.yvestaba.xadrez.game.directionchecker.*;
 import br.com.yvestaba.xadrez.game.pieces.King;
 import br.com.yvestaba.xadrez.game.pieces.Piece;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import static br.com.yvestaba.xadrez.utils.DirectionUtils.getPath;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -27,241 +28,84 @@ class UncoverKingValidator implements MoveValidator{
         if(piece instanceof King){
             return KingMoveValidator.validate(valid, threatChecker);
         }
+        if(!threatChecker.getThreatenArea().contains(from)){
+            return valid;
+        }
         Position kingPosition = this.kingPosition.getPositionByColor(board.getTurnOwner());
         Direction direction = getDirection(from, kingPosition);
         if (isNull(direction)) {
             return valid;
         }
-        if(isCoveringKing(from, board, direction, kingPosition)){
-            var positions = possiblePositions(from, board, direction, piece.getColor().getEnemy());
-            if(!positions.isEmpty()) {
-                valid.retainAll(positions);
-            }
-            return valid;
+        var intersection = getPathTillKing(from, board, direction, kingPosition);
+        if (nonNull(intersection) && isPathThreatened(from, board, direction, intersection)) {
+            valid.retainAll(intersection);
         }
         return valid;
     }
 
-    private Set<Position> possiblePositions(Position from, Board board, Direction direction, Color enemy){
+    private boolean isPathThreatened(Position from, Board board, Direction direction, Set<Position> intersection) {
+        DirectionChecker directionChecker = null;
         switch (direction){
             case E:
-                Piece pieceE = null;
-                int colE = from.getCol() + 1;
-                var ret = new HashSet<Position>();
-                while(isNull(pieceE) && colE < 8){
-                    Position pos = new Position(colE, from.getLin());
-                    ret.add(pos);
-                    pieceE = board.getPiece(pos);
-                    if(pieceE instanceof MoveCross && pieceE.getColor() == enemy){
-                        return ret;
-                    }
-                    colE++;
-                }
-                return new HashSet<>();
+                directionChecker =
+                    new DirectionEChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case W:
-                Piece pieceW = null;
-                int colW = from.getCol() - 1;
-                var retW = new HashSet<Position>();
-                while(isNull(pieceW) && colW >= 0){
-                    Position pos = new Position(colW, from.getLin());
-                    retW.add(pos);
-                    pieceW = board.getPiece(pos);
-                    if(pieceW instanceof MoveCross && pieceW.getColor() == enemy){
-                        return retW;
-                    }
-                    colW--;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionWChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case N:
-                Piece pieceN = null;
-                int linN = from.getLin() + 1;
-                var retN = new HashSet<Position>();
-                while(isNull(pieceN) && linN < 8){
-                    Position pos = new Position(from.getCol(), linN);
-                    retN.add(pos);
-                    pieceN = board.getPiece(pos);
-                    if(pieceN instanceof MoveCross && pieceN.getColor() == enemy){
-                        return retN;
-                    }
-                    linN++;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionNChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case S:
-                Piece pieceS = null;
-                int linS = from.getLin() - 1;
-                var retS = new HashSet<Position>();
-                while(isNull(pieceS) && linS < 8){
-                    Position pos = new Position(from.getCol(), linS);
-                    retS.add(pos);
-                    pieceS = board.getPiece(pos);
-                    if(pieceS instanceof MoveCross && pieceS.getColor() == enemy){
-                        return retS;
-                    }
-                    linS--;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionSChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case NE:
-                Piece pieceNE = null;
-                int colNE = from.getCol() + 1;
-                int linNE = from.getLin() + 1;
-                var retNE = new HashSet<Position>();
-                while(isNull(pieceNE) && colNE < 8 && linNE < 8){
-                    Position pos = new Position(colNE, linNE);
-                    retNE.add(pos);
-                    pieceNE = board.getPiece(pos);
-                    if(pieceNE instanceof MoveDiagonal && pieceNE.getColor() == enemy){
-                        return retNE;
-                    }
-                    colNE++;
-                    linNE++;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionNEChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case NW:
-                Piece pieceNW = null;
-                int colNW = from.getCol() - 1;
-                int linNW = from.getLin() + 1;
-                var retNW = new HashSet<Position>();
-                while(isNull(pieceNW) && colNW >= 0 && linNW < 8){
-                    Position pos = new Position(colNW, linNW);
-                    retNW.add(pos);
-                    pieceNW = board.getPiece(pos);
-                    if(pieceNW instanceof MoveDiagonal && pieceNW.getColor() == enemy){
-                        return retNW;
-                    }
-                    colNW--;
-                    linNW++;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionNWChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case SE:
-                Piece pieceSE = null;
-                int linSE = from.getLin() - 1;
-                int colSE = from.getCol() + 1;
-                var retSE = new HashSet<Position>();
-                while(isNull(pieceSE) && linSE >= 0 && colSE < 8){
-                    Position pos = new Position(colSE, linSE);
-                    retSE.add(pos);
-                    pieceSE = board.getPiece(pos);
-                    if(pieceSE instanceof MoveDiagonal && pieceSE.getColor() == enemy){
-                        return retSE;
-                    }
-                    linSE--;
-                    colSE++;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionSEChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
             case SW:
-                Piece pieceSW = null;
-                int linSW = from.getLin() - 1;
-                int colSW = from.getCol() - 1;
-                var retSW = new HashSet<Position>();
-                while(isNull(pieceSW) && linSW >= 0 && colSW >= 0){
-                    Position pos = new Position(colSW, linSW);
-                    retSW.add(pos);
-                    pieceSW = board.getPiece(pos);
-                    if(pieceSW instanceof MoveDiagonal && pieceSW.getColor() == enemy){
-                        return retSW;
-                    }
-                    linSW--;
-                    colSW--;
-                }
-                return new HashSet<>();
+                directionChecker =
+                        new DirectionSWChecker(null).setDirectionAndPosition(from.getCol(), from.getLin(), board);
+                break;
         }
-        throw new RuntimeException("Unexpected error");
+        Position threatPosition = directionChecker.getThreatPosition();
+        boolean isThreatened = nonNull(threatPosition);
+        if(isThreatened){
+            intersection.addAll(getPath(from, threatPosition, direction));
+        }
+        return isThreatened;
     }
 
-    private boolean isCoveringKing(Position from, Board board, Direction direction, Position kingPosition) {
-        switch (direction){
-            case E:
-                int colN = from.getCol() - 1;
-                while(kingPosition.getCol() < colN){
-                    Piece piece = board.getPiece(new Position(colN, from.getLin()));
-                    if (nonNull(piece)) {
-                        return false;
-                    }
-                    colN--;
-                }
-                return true;
-            case W:
-                int colW = from.getCol() + 1;
-                while(kingPosition.getCol() > colW){
-                    Piece pieceS = board.getPiece(new Position(colW, from.getLin()));
-                    if (nonNull(pieceS)) {
-                        return false;
-                    }
-                    colW++;
-                }
-                return true;
-            case N:
-                int linN = from.getLin() - 1;
-                while(kingPosition.getLin() < linN){
-                    Piece pieceE = board.getPiece(new Position(from.getCol(), linN));
-                    if (nonNull(pieceE)) {
-                        return false;
-                    }
-                    linN--;
-                }
-                return true;
-            case S:
-                int linS = from.getLin() + 1;
-                while(kingPosition.getLin() > linS){
-                    Piece pieceW = board.getPiece(new Position(from.getCol(), linS));
-                    if (nonNull(pieceW)) {
-                        return false;
-                    }
-                    linS++;
-                }
-                return true;
-            case NE:
-                int colNE = from.getCol() - 1;
-                int linNE = from.getLin() - 1;
-                while(kingPosition.getCol() < colNE && kingPosition.getLin() < linNE){
-                    Piece pieceNE = board.getPiece(new Position(colNE, linNE));
-                    if (nonNull(pieceNE)) {
-                        return false;
-                    }
-                    colNE--;
-                    linNE--;
-                }
-                return true;
-            case NW:
-                int colNW = from.getCol() + 1;
-                int linNW = from.getLin() - 1;
-                while(kingPosition.getCol() > colNW && kingPosition.getLin() < linNW){
-                    Piece pieceNW = board.getPiece(new Position(colNW, linNW));
-                    if (nonNull(pieceNW)) {
-                        return false;
-                    }
-                    colNW++;
-                    linNW--;
-                }
-                return true;
-            case SE:
-                int colSE = from.getCol() - 1;
-                int linSE = from.getLin() + 1;
-                while(kingPosition.getCol() < colSE && kingPosition.getLin() > linSE){
-                    Piece pieceSE = board.getPiece(new Position(colSE, linSE));
-                    if (nonNull(pieceSE)) {
-                        return false;
-                    }
-                    colSE--;
-                    linSE++;
-                }
-                return true;
-            case SW:
-                int colSW = from.getCol() + 1;
-                int linSW = from.getLin() + 1;
-                while(kingPosition.getCol() > colSW && kingPosition.getLin() > linSW){
-                    Piece pieceSW = board.getPiece(new Position(colSW, linSW));
-                    if (nonNull(pieceSW)) {
-                        return false;
-                    }
-                    colSW++;
-                    linSW++;
-                }
-                return true;
+    private Set<Position> getPathTillKing(Position from, Board board, Direction direction, Position kingPosition) {
+        Set<Position> intersection = new HashSet<>();
+        var path = getPath(from, kingPosition, direction.opposite());
+        path.remove(kingPosition);
+        for(var pos : path){
+            if(nonNull(board.getPiece(pos))){
+                return null;
+            }
+            intersection.add(pos);
         }
-        throw new RuntimeException("Unexpected error");
+        return intersection;
     }
 
+    /**
+     *
+     * @param piecePosition
+     * @param kingPosition
+     * @return direction of the piece related to its king
+     */
     private Direction getDirection(Position piecePosition, Position kingPosition){
         if(piecePosition.getCol() == kingPosition.getCol()){
             if(piecePosition.getLin() > kingPosition.getLin()){

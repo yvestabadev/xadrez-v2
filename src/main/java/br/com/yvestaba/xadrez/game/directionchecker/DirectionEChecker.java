@@ -6,6 +6,8 @@ import br.com.yvestaba.xadrez.game.generalrules.Board;
 import br.com.yvestaba.xadrez.game.generalrules.MoveCross;
 import br.com.yvestaba.xadrez.game.pieces.Piece;
 
+import static java.util.Objects.nonNull;
+
 public class DirectionEChecker extends DirectionChecker{
 
     public DirectionEChecker(DirectionChecker next) {
@@ -20,6 +22,8 @@ public class DirectionEChecker extends DirectionChecker{
                 piece.getColor() != board.getTurnOwner()){
                 this.threatPosition = new Position(i, lin);
                 return Direction.E;
+            } else if (nonNull(piece)) {
+                break;
             }
         }
         return null;

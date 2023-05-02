@@ -8,6 +8,7 @@ import br.com.yvestaba.xadrez.game.generalrules.MoveDiagonal;
 import br.com.yvestaba.xadrez.game.pieces.Pawn;
 import br.com.yvestaba.xadrez.game.pieces.Piece;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class DirectionSEChecker extends DirectionChecker{
@@ -28,8 +29,9 @@ public class DirectionSEChecker extends DirectionChecker{
             this.threatPosition = new Position(i, j);
             return Direction.SE;
         }
-        while(i < 8 && j >= 0){
-            Piece piece = board.getPiece(new Position(i, j));
+        Piece piece = null;
+        while(i < 8 && j >= 0 && isNull(piece)){
+            piece = board.getPiece(new Position(i, j));
             if(nonNull(piece) && piece.getColor() != board.getTurnOwner() &&
                     piece instanceof MoveDiagonal){
                 this.threatPosition = new Position(i, j);

@@ -25,7 +25,7 @@ public class PiecesMover {
         final var rockChecker = new RockChecker();
         kingPosition = new KingPosition();
         pawnPromotionChecker = new PawnPromotionChecker();
-        movers = Arrays.asList(board, pawnPromotionChecker, threatChecker, rockChecker, kingPosition, enPassantChecker, new EnPassantCaptor(enPassantChecker));
+        movers = Arrays.asList(board, pawnPromotionChecker, new RockTowerMover(), threatChecker, rockChecker, kingPosition, enPassantChecker, new EnPassantCaptor(enPassantChecker));
         validators = Arrays.asList(board, new EnPassantValidator(enPassantChecker), new RockValidator(rockChecker, threatChecker), new UncoverKingValidator(kingPosition, threatChecker), new MoveInCheckValidator(kingPosition, threatChecker));
     }
 

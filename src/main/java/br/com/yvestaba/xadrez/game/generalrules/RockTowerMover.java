@@ -6,7 +6,7 @@ import br.com.yvestaba.xadrez.game.pieces.King;
 class RockTowerMover implements MoveChecker{
 
     public void movePiece(Position from, Position to, Board board) {
-        if(!(board.getPiece(from) instanceof King)){
+        if(!(board.getPiece(to) instanceof King)){
             return;
         }
         if(from.getCol() - to.getCol() != 2 &&
