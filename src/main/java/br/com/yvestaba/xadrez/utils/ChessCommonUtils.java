@@ -15,31 +15,34 @@ public class ChessCommonUtils {
     }
 
     /**
-     *   @returns piece if any
-     *   If space has no piece, add as possible move
+     * Add to set valid positions that the turn owner can get to
+     * @param positions
+     * @param board
+     * @param position
+     * @return true if no piece was found at this position
      */
-    public static Piece addIfDoesNotExistOnBoard(Set<Position> positions, Board board, Position position){
-        Piece piece = board.getPiece(position);
-        if(isNull(piece)){
-            positions.add(position);
-        }
-        return piece;
-    }
-
-    public static Piece addIfDoesNotExistOnBoardOrCapturable(Set<Position> positions, Board board, Position position){
+    public static boolean addPositionIfvalid(Set<Position> positions, Board board, Position position){
         Piece piece = board.getPiece(position);
         if(isNull(piece) || piece.getColor() != board.getTurnOwner()){
             positions.add(position);
         }
-        return piece;
+        return isNull(piece);
     }
 
-    public static Piece addThreatAndGetPiece(Set<Position> positions, Board board, int col, int lin) {
+    /**
+     *
+     * @param positions
+     * @param board
+     * @param col
+     * @param lin
+     * @return true if no piece was found at this position
+     */
+    public static boolean addThreatAndGetPiece(Set<Position> positions, Board board, int col, int lin) {
         Piece piece;
         Position pos = new Position(col, lin);
         piece = board.getPiece(pos);
         positions.add(pos);
-        return piece;
+        return isNull(piece);
     }
 
     public static boolean validateColLin(int col, int lin){

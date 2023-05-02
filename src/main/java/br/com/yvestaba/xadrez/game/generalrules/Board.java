@@ -34,7 +34,7 @@ public class Board implements MoveChecker, MoveValidator {
         }
         board.remove(from);
         board.put(to, piece);
-        turnOwner = turnOwner == WHITE ? BLACK : WHITE;
+        turnOwner = turnOwner.getEnemy();
     }
 
     void moveTowerRock(Position from, Position to){

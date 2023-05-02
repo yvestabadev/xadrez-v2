@@ -1,13 +1,11 @@
 package br.com.yvestaba.xadrez.game.generalrules;
 
 import br.com.yvestaba.xadrez.game.Position;
-import br.com.yvestaba.xadrez.game.pieces.Piece;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.*;
-import static java.util.Objects.isNull;
 
 public interface MoveCross {
 
@@ -34,9 +32,9 @@ public interface MoveCross {
         int col = position.getCol();
         int lin = position.getLin() + 1;
 
-        Piece piece = null;
-        while(lin < 8 && isNull(piece)){
-            piece = addIfDoesNotExistOnBoardOrCapturable(positions, board, new Position(col, lin));
+        boolean willContinue = true;
+        while(lin < 8 && willContinue){
+            willContinue = addPositionIfvalid(positions, board, new Position(col, lin));
             lin++;
         }
     }
@@ -45,9 +43,9 @@ public interface MoveCross {
         int col = position.getCol();
         int lin = position.getLin() - 1;
 
-        Piece piece = null;
-        while(lin >= 0 && isNull(piece)){
-            piece = addIfDoesNotExistOnBoardOrCapturable(positions, board, new Position(col, lin));
+        boolean willContinue = true;
+        while(lin >= 0 && willContinue){
+            willContinue = addPositionIfvalid(positions, board, new Position(col, lin));
             lin--;
         }
     }
@@ -56,9 +54,9 @@ public interface MoveCross {
         int col = position.getCol() + 1;
         int lin = position.getLin();
 
-        Piece piece = null;
-        while(col < 8 && isNull(piece)){
-            piece = addIfDoesNotExistOnBoardOrCapturable(positions, board, new Position(col, lin));
+        boolean willContinue = true;
+        while(col < 8 && willContinue){
+            willContinue = addPositionIfvalid(positions, board, new Position(col, lin));
             col++;
         }
     }
@@ -67,9 +65,9 @@ public interface MoveCross {
         int col = position.getCol() - 1;
         int lin = position.getLin();
 
-        Piece piece = null;
-        while(col >= 0 && isNull(piece)){
-            piece = addIfDoesNotExistOnBoardOrCapturable(positions, board, new Position(col, lin));
+        boolean willContinue = true;
+        while(col >= 0 && willContinue){
+            willContinue = addPositionIfvalid(positions, board, new Position(col, lin));
             col--;
         }
     }
@@ -78,9 +76,9 @@ public interface MoveCross {
         int col = position.getCol();
         int lin = position.getLin() + 1;
 
-        Piece piece = null;
-        while(lin < 8 && isNull(piece)){
-            piece = addThreatAndGetPiece(positions, board, col, lin);
+        boolean willContinue = true;
+        while(lin < 8 && willContinue){
+            willContinue = addThreatAndGetPiece(positions, board, col, lin);
             lin++;
         }
     }
@@ -89,9 +87,9 @@ public interface MoveCross {
         int col = position.getCol();
         int lin = position.getLin() - 1;
 
-        Piece piece = null;
-        while(lin >= 0 && isNull(piece)){
-            piece = addThreatAndGetPiece(positions, board, col, lin);
+        boolean willContinue = true;
+        while(lin >= 0 && willContinue){
+            willContinue = addThreatAndGetPiece(positions, board, col, lin);
             lin--;
         }
     }
@@ -100,9 +98,9 @@ public interface MoveCross {
         int col = position.getCol() + 1;
         int lin = position.getLin();
 
-        Piece piece = null;
-        while(col < 8 && isNull(piece)){
-            piece = addThreatAndGetPiece(positions, board, col, lin);
+        boolean willContinue = true;
+        while(col < 8 && willContinue){
+            willContinue = addThreatAndGetPiece(positions, board, col, lin);
             col++;
         }
     }
@@ -111,9 +109,9 @@ public interface MoveCross {
         int col = position.getCol() - 1;
         int lin = position.getLin();
 
-        Piece piece = null;
-        while(col >= 0 && isNull(piece)){
-            piece = addThreatAndGetPiece(positions, board, col, lin);
+        boolean willContinue = true;
+        while(col >= 0 && willContinue){
+            willContinue = addThreatAndGetPiece(positions, board, col, lin);
             col--;
         }
     }

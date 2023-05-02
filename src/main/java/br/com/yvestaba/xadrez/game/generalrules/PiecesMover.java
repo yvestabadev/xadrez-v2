@@ -16,6 +16,7 @@ public class PiecesMover {
     private final ThreatChecker threatChecker;
     private final KingPosition kingPosition;
     private final Board board;
+    private final PawnPromotionChecker pawnPromotionChecker;
 
     public PiecesMover(){
         final var enPassantChecker = new EnPassantChecker();
@@ -23,7 +24,8 @@ public class PiecesMover {
         threatChecker = new ThreatChecker();
         final var rockChecker = new RockChecker();
         kingPosition = new KingPosition();
-        movers = Arrays.asList(board, threatChecker, rockChecker, kingPosition, enPassantChecker, new EnPassantCaptor(enPassantChecker));
+        pawnPromotionChecker = new PawnPromotionChecker();
+        movers = Arrays.asList(board, pawnPromotionChecker, threatChecker, rockChecker, kingPosition, enPassantChecker, new EnPassantCaptor(enPassantChecker));
         validators = Arrays.asList(board, new EnPassantValidator(enPassantChecker), new RockValidator(rockChecker, threatChecker), new UncoverKingValidator(kingPosition, threatChecker), new MoveInCheckValidator(kingPosition, threatChecker));
     }
 
@@ -34,6 +36,17 @@ public class PiecesMover {
         }
         movers.forEach(m -> m.movePiece(from, to, board));
         CheckMateChecker.check(threatChecker, kingPosition, board, this);
+    }
+
+    /**
+     * Since board movement was already made, proceed with others movers
+     * @param type
+     */
+    public void promotePawn(Class<Piece> type){
+        pawnPromotionChecker.promotePawn(type);
+        for (MoveChecker mover : movers.subList(1, movers.size())) {
+            mover.movePiece(pawnPromotionChecker.getFrom(), pawnPromotionChecker.getTo(), board);
+        }
     }
 
     public Set<Position> validMoves(Position from){

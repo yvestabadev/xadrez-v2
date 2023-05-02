@@ -30,7 +30,7 @@ public class Horse extends Piece{
         ignoreInvalidPositionsAndAdd(positions,col - 1, lin - 2);
 
         for(var pos : positions){
-            addIfDoesNotExistOnBoardOrCapturable(ret, board, pos);
+            addPositionIfvalid(ret, board, pos);
         }
         return ret;
     }

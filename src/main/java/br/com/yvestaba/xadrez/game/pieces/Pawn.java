@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static br.com.yvestaba.xadrez.game.Color.WHITE;
-import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.addIfDoesNotExistOnBoard;
 import static br.com.yvestaba.xadrez.utils.ChessCommonUtils.validateColLin;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece{
@@ -79,5 +79,15 @@ public class Pawn extends Piece{
             return 1;
         }
         return 6;
+    }
+
+    /**
+     *   If space has no piece, add as possible move
+     */
+    private void addIfDoesNotExistOnBoard(Set<Position> positions, Board board, Position position){
+        Piece piece = board.getPiece(position);
+        if(isNull(piece)){
+            positions.add(position);
+        }
     }
 }
