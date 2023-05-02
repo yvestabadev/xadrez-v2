@@ -19,7 +19,7 @@ public class DirectionSChecker extends DirectionChecker{
         for(int i = lin - 1; i >= 0; i--){
             Piece piece = board.getPiece(new Position(col, i));
             if(nonNull(piece) && piece instanceof MoveCross &&
-                    piece.getColor() != board.getTurnOwner()){
+                    piece.getColor().isEnemy(board.getTurnOwner())){
                 this.threatPosition = new Position(col, i);
                 return Direction.S;
             } else if(nonNull(piece)){

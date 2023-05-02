@@ -19,9 +19,17 @@ class PiecesMoverTest {
         PlayReader.play("1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.c3 Qe7 5.O-O d6 6.d4 Bb6 7.Bg5 f6 8.Bh4 g5 9.Nxg5 fxg5 10.Qh5+ Kd7 11.Bxg5 Qg7 12.Be6+ Kxe6 13.Qe8+ Nge7 14.d5#");
     }
 
+    //https://www.chessgames.com/perl/chessgame?gid=2490427
     @Test
     void borisVsMaksim(){
         PlayReader.play("1.e4 c5 2.Nc3 d6 3.d4 cxd4 4.Qxd4 Nf6 5.Be3 Nc6 6.Qd2 e6 7.h3 d5 8.exd5 exd5 9.O-O-O Be6 10.Bb5 Bb4 11.Nge2 Qa5 12.Bd4 Ne4 13.Qe3 O-O 14.Bxc6 bxc6 15.Nxe4 dxe4 16.a3 Be7 17.Qxe4 Rfe8 18.Nf4 Bg5 19.Bc3 Qc5 20.Qf3 Qc4 21.Rd4 Qa2 22.Rhd1 c5 23.Rd6 Rad8 24.b3 Rxd6 25.Rxd6 Qxa3+ 26.Bb2 Qb4 27.g3 Bxh3 28.Bc3 Qa3+ 29.Kb1 c4 30.Qc6 Rc8 31.Qa6 Qxa6 32.Rxa6 Bxf4 33.gxf4 cxb3 34.Kb2 bxc2 35.Kxc2 Rc7 36.Ra5 f6 37.f5 Bf1 38.Rd5 h5 39.Kd2 h4 40.Rd8+ Kh7 41.Bb4 Rc4");
     }
+
+    //https://www.chessgames.com/perl/chessgame?gid=1259987
+    @Test
+    void oldestChessRecordEver(){
+        PlayReader.play("1.e4 d5 2.exd5 Qxd5 3.Nc3 Qd8 4.Bc4 Nf6 5.Nf3 Bg4 6.h3 Bxf3 7.Qxf3 e6 8.Qxb7 Nbd7 9.Nb5 Rc8 10.Nxa7 Nb6 11.Nxc8 Nxc8 12.d4 Nd6 13.Bb5+ Nxb5 14.Qxb5+ Nd7 15.d5 exd5 16.Be3 Bd6 17.Rd1 Qf6 18.Rxd5 Qg6 19.Bf4 Bxf4 20.Qxd7+ Kf8 21.Qd8#");
+    }
+
 
 }

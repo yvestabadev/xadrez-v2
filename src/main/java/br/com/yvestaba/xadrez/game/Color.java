@@ -6,4 +6,8 @@ public enum Color {
     public Color getEnemy(){
         return this == WHITE ? BLACK : WHITE;
     }
+
+    public boolean isEnemy(Color color){
+        return this != color;
+    }
 }

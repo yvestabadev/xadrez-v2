@@ -32,7 +32,7 @@ public class DirectionSWChecker extends DirectionChecker{
         Piece piece = null;
         while(i >= 0 && j >= 0 && isNull(piece)){
             piece = board.getPiece(new Position(i, j));
-            if(nonNull(piece) && piece.getColor() != board.getTurnOwner() &&
+            if(nonNull(piece) && piece.getColor().isEnemy(board.getTurnOwner()) &&
                     piece instanceof MoveDiagonal){
                 this.threatPosition = new Position(i, j);
                 return Direction.SW;
