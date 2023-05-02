@@ -4,7 +4,7 @@ import br.com.yvestaba.xadrez.game.directionchecker.DirectionChecker;
 
 public enum Direction {
 
-    N,NE,E,SE,S,SW,W,NW,L,MANY;
+    N,NE,E,SE,S,SW,W,NW,L;
 
     public Direction opposite() {
         switch (this){

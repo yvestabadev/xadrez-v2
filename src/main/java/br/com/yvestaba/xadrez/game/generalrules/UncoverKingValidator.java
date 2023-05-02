@@ -26,7 +26,7 @@ class UncoverKingValidator implements MoveValidator{
     public Set<Position> getValidPlaces(Position from, Board board, Set<Position> valid) {
         Piece piece = board.getPiece(from);
         if(piece instanceof King){
-            return KingMoveValidator.validate(valid, threatChecker);
+            return KingMoveValidator.validate(from, valid, threatChecker, board);
         }
         if(!threatChecker.getThreatenArea().contains(from)){
             return valid;

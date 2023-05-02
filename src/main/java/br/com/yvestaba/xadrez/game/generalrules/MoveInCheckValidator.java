@@ -34,23 +34,23 @@ class MoveInCheckValidator implements MoveValidator{
     }
 
     private Set<Position> invalidateByDirection(Set<Position> valid, DirectionChecker directionChecker, Board board, Position positionKing) {
-        if(directionChecker.getDirection() == MANY){
+        if(directionChecker.hasManyDirections()){
             return new HashSet<>();
         }
-        if(directionChecker.getDirection() == L){
+        if(directionChecker.getTheOnlyDirection() == L){
             return new HashSet<>(Set.of(directionChecker.getThreatPosition()));
         }
         Piece piece = null;
         Set<Position> intersec = new HashSet<>();
-        Integer col = getColumnByDirection(positionKing.getCol(), directionChecker.getDirection());
-        Integer lin = getLineByDirection(positionKing.getLin(), directionChecker.getDirection());
+        Integer col = getColumnByDirection(positionKing.getCol(), directionChecker.getTheOnlyDirection());
+        Integer lin = getLineByDirection(positionKing.getLin(), directionChecker.getTheOnlyDirection());
 
         while(isNull(piece)){
             Position position = new Position(col, lin);
             piece = board.getPiece(position);
             intersec.add(position);
-            col = getColumnByDirection(col, directionChecker.getDirection());
-            lin = getLineByDirection(lin, directionChecker.getDirection());
+            col = getColumnByDirection(col, directionChecker.getTheOnlyDirection());
+            lin = getLineByDirection(lin, directionChecker.getTheOnlyDirection());
         }
         valid.retainAll(intersec);
         return valid;
